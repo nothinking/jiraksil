@@ -1,8 +1,8 @@
 // 지락실 게임 — 최소 서비스 워커
 // 캐시 전략: HTML은 network-first (최신 코드 받기), 그 외 자산은 cache-first
 
-const CACHE = "jiraksil-v1";
-const PRECACHE = ["./", "./manifest.webmanifest", "./icon.svg"];
+const CACHE = "jiraksil-v2";
+const PRECACHE = ["./", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -34,8 +34,9 @@ self.addEventListener("fetch", (event) => {
   const isHTML =
     req.mode === "navigate" ||
     (req.headers.get("accept") || "").includes("text/html");
+  const isManifest = url.pathname.endsWith(".webmanifest");
 
-  if (isHTML) {
+  if (isHTML || isManifest) {
     event.respondWith(
       fetch(req)
         .then((res) => {
